@@ -507,6 +507,77 @@ a { color: inherit; text-decoration: none; }
     color: var(--ink-faint);
 }
 
+.footer-links {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------------ */
+/* Legal pages (Terms, Privacy)                                        */
+/* ------------------------------------------------------------------ */
+
+.legal-section {
+    padding: 5rem 2rem 4rem;
+}
+
+.legal-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.legal-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+}
+
+.legal-intro {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3rem;
+}
+
+.legal-content {
+    color: var(--ink);
+    line-height: 1.8;
+}
+
+.legal-content h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-content h2:first-child {
+    margin-top: 0;
+}
+
+.legal-content p {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+}
+
+.legal-content ul {
+    margin: 1rem 0 1.5rem 1.5rem;
+    padding: 0;
+}
+
+.legal-content li {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+}
+
 /* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
