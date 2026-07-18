@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash(git init)"
+      "Bash(git init)",
+      "Bash(curl -s -X POST http://127.0.0.1:5001/register -d 'name=Test User&email=test.user.step2@example.com&password=password123' -w '\\\\nStatus: %{http_code}\\\\n' -L)",
+      "Bash(curl -s -X POST http://127.0.0.1:5001/register -d foo=bar -w '\\\\nStatus: %{http_code}\\\\n')",
+      "Bash(curl -s -X POST http://127.0.0.1:5001/register -d 'name=Valid Registration Test&email=validemail@test.com&password=securepass123' -w '\\\\nRedirect Status: %{http_code}\\\\n' -L)",
+      "Bash(curl *)",
+      "PowerShell(Get-Process *)"
     ],
     "ask": [
       "Bash(git commit)"
