@@ -1,12 +1,23 @@
 import sqlite3
+import os
 from datetime import date, timedelta
 from pathlib import Path
 from werkzeug.security import generate_password_hash
 
+def get_db():
+    # init_db() and seed_db() remain Step 01 scope, not implemented here.
+    db_path = os.path.join(os.path.dirname(__file__), "..", "expense_tracker.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
 DB_PATH = Path(__file__).resolve().parent.parent / "expense_tracker.db"
 
 
-def get_db():
+def 
+  ():
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -79,3 +90,26 @@ def seed_db():
 
     conn.commit()
     conn.close()
+
+
+def get_user_by_email(email):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, email, password_hash FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+
+def create_user(name, email, password):
+    password_hash = generate_password_hash(password)
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+        (name, email, password_hash),
+    )
+    conn.commit()
+    user_id = cursor.lastrowid
+    conn.close()
+    return user_id
