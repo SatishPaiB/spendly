@@ -116,7 +116,55 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
-    return "Profile page — coming in Step 4"
+    db = get_db()
+    user_row = db.execute(
+        "SELECT id, name, email, created_at FROM users WHERE id = ?", (session["user_id"],)
+    ).fetchone()
+    db.close()
+
+    if user_row is None:
+        abort(404)
+
+    name = user_row["name"]
+    email = user_row["email"]
+    initials = "".join([part[0].upper() for part in name.split()])
+    created_date = user_row["created_at"][:10]
+
+    user = {
+        "name": name,
+        "email": email,
+        "initials": initials,
+        "member_since": created_date,
+    }
+
+    stats = {
+        "total_spent": 18420.50,
+        "transaction_count": 27,
+        "top_category": "Food & Dining",
+    }
+
+    transactions = [
+        {"date": "2026-07-15", "description": "Swiggy — dinner order", "category": "food", "amount": 640.00},
+        {"date": "2026-07-13", "description": "Uber ride to office", "category": "transport", "amount": 220.50},
+        {"date": "2026-07-10", "description": "Amazon — desk lamp", "category": "shopping", "amount": 1299.00},
+        {"date": "2026-07-08", "description": "Electricity bill — BESCOM", "category": "bills", "amount": 2150.00},
+        {"date": "2026-07-05", "description": "Cafe Coffee Day", "category": "food", "amount": 310.00},
+    ]
+
+    categories = [
+        {"name": "Food & Dining", "slug": "food", "total": 6820.00, "percent": 37},
+        {"name": "Bills & Utilities", "slug": "bills", "total": 4900.00, "percent": 27},
+        {"name": "Shopping", "slug": "shopping", "total": 3900.50, "percent": 21},
+        {"name": "Transport", "slug": "transport", "total": 2800.00, "percent": 15},
+    ]
+
+    return render_template(
+        "profile.html",
+        user=user,
+        stats=stats,
+        transactions=transactions,
+        categories=categories,
+    )
 
 
 @app.route("/expenses/add")
