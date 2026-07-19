@@ -1,7 +1,8 @@
 from flask import Flask, render_template, session, request, redirect, url_for
 from werkzeug.security import check_password_hash
 from functools import wraps
-from database.db import get_db
+from flask import Flask, render_template, request, redirect, url_for, abort
+from database.db import init_db, seed_db, get_user_by_email, create_user
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
@@ -19,6 +20,10 @@ def login_required(view_func):
         return view_func(*args, **kwargs)
     return wrapper
 
+with app.app_context():
+    init_db()
+    seed_db()
+
 
 # ------------------------------------------------------------------ #
 # Routes                                                              #
@@ -29,9 +34,33 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    if "name" not in request.form or "email" not in request.form or "password" not in request.form:
+        abort(400)
+
+    name = request.form.get("name", "").strip()
+    email = request.form.get("email", "").strip().lower()
+    password = request.form.get("password", "")
+
+    if not name:
+        return render_template("register.html", error="Please enter your full name.")
+
+    if "@" not in email:
+        return render_template("register.html", error="Please enter a valid email address.")
+
+    if len(password) < 8:
+        return render_template("register.html", error="Password must be at least 8 characters.")
+
+    existing_user = get_user_by_email(email)
+    if existing_user:
+        return render_template("register.html", error="An account with that email already exists.")
+
+    create_user(name, email, password)
+    return redirect(url_for("login"))
 
 
 @app.route("/login", methods=["GET", "POST"])
