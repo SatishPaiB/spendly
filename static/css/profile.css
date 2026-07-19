@@ -1,0 +1,269 @@
+/* Profile page styles */
+
+.profile-section {
+  padding: 3rem 2rem;
+}
+
+.profile-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-card {
+  background: var(--paper-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+}
+
+.profile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.profile-user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--ink);
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  margin: 0 0 0.25rem 0;
+}
+
+.profile-since {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+/* Stats row */
+
+.profile-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.profile-stat-card {
+  background: var(--paper-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile-stat-label {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.profile-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Card title */
+
+.profile-card-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin: 0 0 1.25rem 0;
+  font-weight: 600;
+}
+
+/* Transaction table */
+
+.tx-table-wrap {
+  overflow-x: auto;
+}
+
+.tx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tx-table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.tx-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink-soft);
+}
+
+.tx-table tbody tr:hover {
+  background: var(--paper-warm);
+}
+
+.tx-amount-col {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Badges */
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-food {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.badge-transport {
+  background: var(--accent-2-light);
+  color: var(--accent-2);
+}
+
+.badge-bills {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.badge-shopping {
+  background: var(--border-soft);
+  color: var(--ink-soft);
+}
+
+/* Category breakdown */
+
+.profile-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.category-row-item {
+  display: grid;
+  grid-template-columns: 140px 1fr 100px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.category-row-name {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.category-row-bar {
+  height: 8px;
+  background: var(--border-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.category-row-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.category-fill--food {
+  background: var(--accent);
+}
+
+.category-fill--transport {
+  background: var(--accent-2);
+}
+
+.category-fill--bills {
+  background: var(--danger);
+}
+
+.category-fill--shopping {
+  background: var(--ink-muted);
+}
+
+.category-row-total {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Width classes for category breakdown bars */
+
+.w-15 { width: 15%; }
+.w-21 { width: 21%; }
+.w-27 { width: 27%; }
+.w-37 { width: 37%; }
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .profile-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .category-row-item {
+    grid-template-columns: 100px 1fr 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-user-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .category-row-item {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .category-row-total {
+    text-align: left;
+  }
+}
