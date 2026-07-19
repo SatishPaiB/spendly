@@ -1,8 +1,7 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, abort
 from werkzeug.security import check_password_hash
 from functools import wraps
-from flask import Flask, render_template, request, redirect, url_for, abort
-from database.db import init_db, seed_db, get_user_by_email, create_user
+from database.db import init_db, seed_db, get_user_by_email, create_user, get_db
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
