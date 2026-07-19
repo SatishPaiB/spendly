@@ -18,10 +18,17 @@
                 <span class="brand-icon">◈</span>
                 <span class="brand-name">Spendly</span>
             </a>
+            {% if session.user_id %}
+            <div class="nav-links">
+                <span>{{ session.user_email }}</span>
+                <a href="{{ url_for('logout') }}" class="nav-cta">Log out</a>
+            </div>
+            {% else %}
             <div class="nav-links">
                 <a href="{{ url_for('login') }}">Sign in</a>
                 <a href="{{ url_for('register') }}" class="nav-cta">Get started</a>
             </div>
+            {% endif %}
         </div>
     </nav>
 

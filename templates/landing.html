@@ -14,10 +14,12 @@
         Spendly helps you log expenses, spot patterns, and stay
         on budget — without the spreadsheet headache.
     </p>
+    {% if not session.user_id %}
     <div class="hero-actions">
         <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
         <button type="button" class="btn-primary btn-secondary" id="demo-btn">See how it works</button>
     </div>
+    {% endif %}
     <div class="hero-visual">
         <div class="dashboard-preview">
             <div class="dashboard-dots">
@@ -86,6 +88,7 @@
     </div>
 </section>
 
+{% if not session.user_id %}
 <section class="cta-section">
     <div class="cta-inner">
         <h2 class="cta-title">Ready to take control?</h2>
@@ -93,6 +96,7 @@
         <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
     </div>
 </section>
+{% endif %}
 
 <div id="demo-modal" class="modal">
     <div class="modal-overlay"></div>
