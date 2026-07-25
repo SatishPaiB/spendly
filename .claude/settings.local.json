@@ -11,7 +11,10 @@
       "Bash(python -m pytest tests/test_06-date-filter.py -v)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(git commit -m 'Implement Analytics module with coming-soon page *)",
+      "Bash(git commit -m 'Add spec for Step 07: Add Expense *)",
+      "Bash(git push *)"
     ],
     "ask": [
       "Bash(git commit)"
