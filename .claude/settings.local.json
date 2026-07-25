@@ -7,7 +7,11 @@
       "Bash(curl -s -X POST http://127.0.0.1:5001/register -d foo=bar -w '\\\\nStatus: %{http_code}\\\\n')",
       "Bash(curl -s -X POST http://127.0.0.1:5001/register -d 'name=Valid Registration Test&email=validemail@test.com&password=securepass123' -w '\\\\nRedirect Status: %{http_code}\\\\n' -L)",
       "Bash(curl *)",
-      "PowerShell(Get-Process *)"
+      "PowerShell(Get-Process *)",
+      "Bash(python -m pytest tests/test_06-date-filter.py -v)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(python *)"
     ],
     "ask": [
       "Bash(git commit)"
