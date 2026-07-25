@@ -200,6 +200,18 @@ def logout():
     return redirect(url_for("landing"))
 
 
+@app.route("/analytics")
+@login_required
+def analytics():
+    stats = {
+        "users": "2,400",
+        "satisfaction": "97%",
+        "speed": "<200ms",
+        "data": "5M+",
+    }
+    return render_template("analytics.html", active_page="analytics", stats=stats)
+
+
 @app.route("/profile")
 @login_required
 def profile():
@@ -253,6 +265,7 @@ def profile():
         active_start_date=start_date,
         active_end_date=end_date,
         date_range_text=date_range_text,
+        active_page="profile",
     )
 
 
