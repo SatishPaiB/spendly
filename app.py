@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, request, redirect, url_for, abort
 from werkzeug.security import check_password_hash
 from functools import wraps
-from datetime import datetime
-from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date
+from datetime import datetime, date
+from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date, create_expense
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
@@ -269,10 +269,63 @@ def profile():
     )
 
 
-@app.route("/expenses/add")
+@app.route("/expenses/add", methods=["GET", "POST"])
 @login_required
 def add_expense():
-    return "Add expense — coming in Step 7"
+    today = date.today().isoformat()
+
+    if request.method == "GET":
+        return render_template(
+            "expenses/add.html",
+            categories=CATEGORY_MAPPING,
+            today=today,
+            date=today,
+            category="",
+            description="",
+        )
+
+    if "amount" not in request.form or "category" not in request.form or "date" not in request.form:
+        abort(400)
+
+    amount_raw = request.form.get("amount", "").strip()
+    category = request.form.get("category", "").strip()
+    expense_date = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    error = None
+    amount = None
+
+    if not amount_raw or not category or not expense_date:
+        error = "Amount, category and date are required."
+    else:
+        try:
+            amount = float(amount_raw)
+            if amount <= 0:
+                error = "Amount must be a positive number."
+        except ValueError:
+            error = "Please enter a valid amount."
+
+        if error is None and category not in CATEGORY_MAPPING:
+            error = "Please select a valid category."
+
+        if error is None and not is_valid_date(expense_date):
+            error = "Please enter the date in YYYY-MM-DD format."
+
+    if error:
+        return render_template(
+            "expenses/add.html",
+            categories=CATEGORY_MAPPING,
+            today=today,
+            error=error,
+            category=category,
+            date=expense_date if expense_date else today,
+            description=description,
+        )
+
+    amount = round(amount, 2)
+    create_expense(session["user_id"], amount, category, expense_date, description or None)
+
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/edit")
