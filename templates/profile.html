@@ -10,6 +10,10 @@
 <section class="profile-section">
   <div class="profile-container">
 
+    {% if error %}
+    <div class="auth-error">{{ error }}</div>
+    {% endif %}
+
     <!-- 1. User info card -->
     <div class="profile-card profile-user-card">
       <div class="profile-avatar">{{ user.initials }}</div>
@@ -36,9 +40,36 @@
       </div>
     </div>
 
+    <!-- 2.5. Date filter form -->
+    <div class="profile-card profile-filter-card">
+      <h3 class="profile-filter-title">Filter by date</h3>
+      <form method="GET" action="{{ url_for('profile') }}" class="profile-filter-form">
+        <div class="form-group">
+          <label for="start_date">Start date</label>
+          <input type="date" id="start_date" name="start_date" class="form-input" value="{{ active_start_date or '' }}">
+        </div>
+        <div class="form-group">
+          <label for="end_date">End date</label>
+          <input type="date" id="end_date" name="end_date" class="form-input" value="{{ active_end_date or '' }}">
+        </div>
+        <div class="profile-filter-actions">
+          <button type="submit" class="btn-primary">Filter</button>
+          {% if has_filter %}
+          <a href="{{ url_for('profile') }}" class="btn-ghost">Clear filter</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+
     <!-- 3. Transaction history table -->
     <div class="profile-card">
-      <h2 class="profile-card-title">Recent transactions</h2>
+      <h2 class="profile-card-title">
+        {% if has_filter and date_range_text %}
+        Transactions ({{ date_range_text }})
+        {% else %}
+        Recent transactions
+        {% endif %}
+      </h2>
       <div class="tx-table-wrap">
         <table class="tx-table">
           <thead>
@@ -50,6 +81,7 @@
             </tr>
           </thead>
           <tbody>
+            {% if transactions %}
             {% for tx in transactions %}
             <tr>
               <td>{{ tx.date }}</td>
@@ -58,6 +90,11 @@
               <td class="tx-amount-col">₹{{ "%.2f"|format(tx.amount) }}</td>
             </tr>
             {% endfor %}
+            {% else %}
+            <tr>
+              <td colspan="4" class="tx-empty-message">No expenses in this date range</td>
+            </tr>
+            {% endif %}
           </tbody>
         </table>
       </div>

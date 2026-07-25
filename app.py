@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for, abort
 from werkzeug.security import check_password_hash
 from functools import wraps
-from database.db import init_db, seed_db, get_user_by_email, create_user, get_db
+from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
@@ -18,6 +18,15 @@ def login_required(view_func):
             return redirect(url_for("login"))
         return view_func(*args, **kwargs)
     return wrapper
+
+
+def is_valid_date(date_string):
+    try:
+        from datetime import datetime
+        datetime.strptime(date_string, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
 
 with app.app_context():
     init_db()
@@ -137,26 +146,96 @@ def profile():
         "member_since": created_date,
     }
 
-    stats = {
-        "total_spent": 18420.50,
-        "transaction_count": 27,
-        "top_category": "Food & Dining",
+    category_mapping = {
+        "Food": {"name": "Food & Dining", "slug": "food"},
+        "Transport": {"name": "Transport", "slug": "transport"},
+        "Bills": {"name": "Bills & Utilities", "slug": "bills"},
+        "Shopping": {"name": "Shopping", "slug": "shopping"},
+        "Health": {"name": "Health", "slug": "health"},
+        "Entertainment": {"name": "Entertainment", "slug": "entertainment"},
+        "Other": {"name": "Other", "slug": "other"},
     }
 
-    transactions = [
-        {"date": "2026-07-15", "description": "Swiggy — dinner order", "category": "food", "amount": 640.00},
-        {"date": "2026-07-13", "description": "Uber ride to office", "category": "transport", "amount": 220.50},
-        {"date": "2026-07-10", "description": "Amazon — desk lamp", "category": "shopping", "amount": 1299.00},
-        {"date": "2026-07-08", "description": "Electricity bill — BESCOM", "category": "bills", "amount": 2150.00},
-        {"date": "2026-07-05", "description": "Cafe Coffee Day", "category": "food", "amount": 310.00},
-    ]
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+    error = None
 
-    categories = [
-        {"name": "Food & Dining", "slug": "food", "total": 6820.00, "percent": 37},
-        {"name": "Bills & Utilities", "slug": "bills", "total": 4900.00, "percent": 27},
-        {"name": "Shopping", "slug": "shopping", "total": 3900.50, "percent": 21},
-        {"name": "Transport", "slug": "transport", "total": 2800.00, "percent": 15},
-    ]
+    if start_date or end_date:
+        if start_date and not is_valid_date(start_date):
+            error = "Please enter dates in YYYY-MM-DD format."
+        elif end_date and not is_valid_date(end_date):
+            error = "Please enter dates in YYYY-MM-DD format."
+        elif start_date and end_date and start_date > end_date:
+            error = "Start date cannot be after end date."
+
+    expenses_rows = get_expenses_by_user_and_date(session["user_id"], start_date, end_date)
+
+    transactions = []
+    category_totals = {}
+
+    for expense in expenses_rows:
+        db_category = expense["category"]
+        mapped = category_mapping.get(db_category, {"name": db_category, "slug": db_category.lower()})
+
+        transactions.append({
+            "date": expense["date"],
+            "description": expense["description"],
+            "category": mapped["slug"],
+            "amount": expense["amount"],
+        })
+
+        if db_category not in category_totals:
+            category_totals[db_category] = 0
+        category_totals[db_category] += expense["amount"]
+
+    total_spent = sum(category_totals.values())
+    transaction_count = len(transactions)
+
+    if category_totals:
+        top_category_db = max(category_totals, key=category_totals.get)
+        top_category = category_mapping[top_category_db]["name"]
+    else:
+        top_category = "—"
+
+    stats = {
+        "total_spent": round(total_spent, 2),
+        "transaction_count": transaction_count,
+        "top_category": top_category,
+    }
+
+    categories = []
+    if total_spent > 0:
+        for db_category, total in sorted(category_totals.items(), key=lambda x: x[1], reverse=True):
+            mapped = category_mapping[db_category]
+            percent = int((total / total_spent) * 100)
+            categories.append({
+                "name": mapped["name"],
+                "slug": mapped["slug"],
+                "total": round(total, 2),
+                "percent": percent,
+            })
+
+    has_filter = bool(start_date or end_date)
+    date_range_text = ""
+
+    if has_filter:
+        from datetime import datetime
+        try:
+            if start_date:
+                start_obj = datetime.strptime(start_date, "%Y-%m-%d")
+                start_formatted = start_obj.strftime("%b %-d, %Y").replace("%-d", str(start_obj.day))
+            else:
+                start_formatted = "earliest"
+
+            if end_date:
+                end_obj = datetime.strptime(end_date, "%Y-%m-%d")
+                end_formatted = end_obj.strftime("%b %-d, %Y").replace("%-d", str(end_obj.day))
+            else:
+                end_formatted = "today"
+
+            date_range_text = f"{start_formatted} - {end_formatted}"
+        except ValueError:
+            date_range_text = ""
 
     return render_template(
         "profile.html",
@@ -164,6 +243,11 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        error=error,
+        has_filter=has_filter,
+        active_start_date=start_date,
+        active_end_date=end_date,
+        date_range_text=date_range_text,
     )
 
 

@@ -103,3 +103,27 @@ def create_user(name, email, password):
     user_id = cursor.lastrowid
     conn.close()
     return user_id
+
+
+def get_expenses_by_user_and_date(user_id, start_date=None, end_date=None):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = "SELECT id, user_id, amount, category, date, description FROM expenses WHERE user_id = ?"
+    params = [user_id]
+
+    if start_date:
+        query += " AND date >= ?"
+        params.append(start_date)
+
+    if end_date:
+        query += " AND date <= ?"
+        params.append(end_date)
+
+    query += " ORDER BY date DESC"
+
+    cursor.execute(query, params)
+    expenses = cursor.fetchall()
+    conn.close()
+
+    return expenses
