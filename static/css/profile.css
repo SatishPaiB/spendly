@@ -177,13 +177,13 @@
 }
 
 .badge-health {
-  background: var(--accent-3-light, #f0e6ff);
-  color: var(--accent-3, #7c3aed);
+  background: var(--accent-3-light);
+  color: var(--accent-3);
 }
 
 .badge-entertainment {
-  background: var(--accent-4-light, #fef3c7);
-  color: var(--accent-4, #d97706);
+  background: var(--accent-4-light);
+  color: var(--accent-4);
 }
 
 .badge-other {

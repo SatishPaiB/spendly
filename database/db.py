@@ -119,6 +119,8 @@ def get_expenses_by_user_and_date(user_id, start_date=None, end_date=None):
     if end_date:
         query += " AND date <= ?"
         params.append(end_date)
+    elif start_date:
+        query += " AND date <= date('now')"
 
     query += " ORDER BY date DESC"
 
