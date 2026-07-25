@@ -223,13 +223,13 @@ def profile():
         try:
             if start_date:
                 start_obj = datetime.strptime(start_date, "%Y-%m-%d")
-                start_formatted = start_obj.strftime("%b %-d, %Y").replace("%-d", str(start_obj.day))
+                start_formatted = f"{start_obj.strftime('%b')} {start_obj.day}, {start_obj.year}"
             else:
                 start_formatted = "earliest"
 
             if end_date:
                 end_obj = datetime.strptime(end_date, "%Y-%m-%d")
-                end_formatted = end_obj.strftime("%b %-d, %Y").replace("%-d", str(end_obj.day))
+                end_formatted = f"{end_obj.strftime('%b')} {end_obj.day}, {end_obj.year}"
             else:
                 end_formatted = "today"
 
