@@ -352,3 +352,14 @@
     text-align: left;
   }
 }
+
+/* Action bar for adding expenses */
+.profile-action-bar {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.profile-action-bar .btn-primary {
+  align-self: flex-start;
+}
