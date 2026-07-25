@@ -176,6 +176,21 @@
   color: var(--ink-soft);
 }
 
+.badge-health {
+  background: var(--accent-3-light);
+  color: var(--accent-3);
+}
+
+.badge-entertainment {
+  background: var(--accent-4-light);
+  color: var(--accent-4);
+}
+
+.badge-other {
+  background: var(--ink-faint, #f5f5f5);
+  color: var(--ink-muted, #888);
+}
+
 /* Category breakdown */
 
 .profile-category-list {
@@ -233,12 +248,82 @@
   font-weight: 500;
 }
 
+/* Date filter form */
+
+.profile-filter-card {
+  background: var(--paper-card);
+}
+
+.profile-filter-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 0 0 1.25rem 0;
+  font-weight: 600;
+}
+
+.profile-filter-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.profile-filter-form .form-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.profile-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tx-empty-message {
+  text-align: center;
+  color: var(--ink-muted);
+  padding: 2rem !important;
+  font-style: italic;
+}
+
+.category-fill--health {
+  background: var(--accent-3, #7c3aed);
+}
+
+.category-fill--entertainment {
+  background: var(--accent-4, #d97706);
+}
+
+.category-fill--other {
+  background: var(--ink-faint);
+}
+
 /* Width classes for category breakdown bars */
 
 .w-15 { width: 15%; }
 .w-21 { width: 21%; }
 .w-27 { width: 27%; }
 .w-37 { width: 37%; }
+.w-5 { width: 5%; }
+.w-10 { width: 10%; }
+.w-20 { width: 20%; }
+.w-25 { width: 25%; }
+.w-30 { width: 30%; }
+.w-35 { width: 35%; }
+.w-40 { width: 40%; }
+.w-45 { width: 45%; }
+.w-50 { width: 50%; }
+.w-55 { width: 55%; }
+.w-60 { width: 60%; }
+.w-65 { width: 65%; }
+.w-70 { width: 70%; }
+.w-75 { width: 75%; }
+.w-80 { width: 80%; }
+.w-85 { width: 85%; }
+.w-90 { width: 90%; }
+.w-95 { width: 95%; }
+.w-100 { width: 100%; }
 
 /* Responsive */
 
