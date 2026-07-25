@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics – Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-page" id="analyticsPage">
+  <!-- Grid Background -->
+  <div class="grid-background" id="gridBg"></div>
+
+  <!-- Header -->
+  <header class="analytics-header fade-up-1">
+    <div class="header-left">
+      <div class="logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <rect x="2" y="14" width="5" height="12" rx="1" fill="currentColor"/>
+          <rect x="10" y="8" width="5" height="18" rx="1" fill="currentColor" opacity="0.7"/>
+          <rect x="18" y="2" width="5" height="24" rx="1" fill="currentColor" opacity="0.4"/>
+          <circle cx="4.5" cy="13" r="2" fill="currentColor"/>
+          <circle cx="12.5" cy="7" r="2" fill="currentColor" opacity="0.7"/>
+          <circle cx="20.5" cy="1" r="2" fill="currentColor" opacity="0.4"/>
+        </svg>
+      </div>
+      <span class="brand-name">Spendly</span>
+    </div>
+    <div class="header-right">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>In development</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ticker Strip -->
+  <div class="ticker-strip">
+    <div class="ticker-scroll">
+      <span class="ticker-item"><span class="ticker-dot">◆</span> REAL-TIME DASHBOARDS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> FUNNEL ANALYTICS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> COHORT ANALYSIS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> CUSTOM EVENTS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> SESSION REPLAY</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> A/B TESTING</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> REVENUE METRICS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> RETENTION CURVES</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="ticker-item"><span class="ticker-dot">◆</span> REAL-TIME DASHBOARDS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> FUNNEL ANALYTICS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> COHORT ANALYSIS</span>
+      <span class="ticker-item"><span class="ticker-dot">◆</span> CUSTOM EVENTS</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="analytics-main">
+    <!-- Eyebrow -->
+    <div class="eyebrow fade-up-1">
+      <span class="eyebrow-line"></span>
+      <span class="eyebrow-text">Analytics reimagined</span>
+      <span class="eyebrow-line"></span>
+    </div>
+
+    <!-- Headline -->
+    <h1 class="hero-headline fade-up-2">
+      Your data deserves<br>
+      <span class="accent-text">better answers.</span>
+    </h1>
+
+    <!-- Subtext -->
+    <p class="hero-subtext fade-up-3">
+      We're building an analytics platform that makes sense of your product data — fast,
+      honest, and beautifully clear. No fluff, no black boxes. Just insight you can act on.
+    </p>
+
+    <!-- Sparkline -->
+    <div class="sparkline-container fade-up-3">
+      <svg class="sparkline" viewBox="0 0 320 72" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="spk-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="currentColor" stopOpacity="0.25"/>
+            <stop offset="100%" stopColor="currentColor" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line x1="0" y1="18" x2="320" y2="18" stroke="rgba(0,0,0,0.07)" strokeWidth="1"/>
+        <line x1="0" y1="36" x2="320" y2="36" stroke="rgba(0,0,0,0.07)" strokeWidth="1"/>
+        <line x1="0" y1="54" x2="320" y2="54" stroke="rgba(0,0,0,0.07)" strokeWidth="1"/>
+        <!-- Fill area -->
+        <path d="M0 60 L40 48 L80 52 L120 28 L160 34 L200 16 L240 22 L280 8 L320 12 L320 72 L0 72 Z"
+              fill="url(#spk-grad)"/>
+        <!-- Line -->
+        <path d="M0 60 L40 48 L80 52 L120 28 L160 34 L200 16 L240 22 L280 8 L320 12"
+              stroke="currentColor" strokeWidth="1.5" fill="none"
+              vectorEffect="non-scaling-stroke" class="sparkline-path"/>
+        <!-- End dot -->
+        <circle cx="320" cy="12" r="3.5" fill="currentColor" class="pulse-ring"/>
+      </svg>
+      <p class="sparkline-label">Monthly active users — preview dataset</p>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-section fade-up-5">
+      <p class="countdown-label">Estimated launch</p>
+      <div class="countdown-display">
+        <div class="countdown-unit">
+          <div class="countdown-value" id="days">0</div>
+          <div class="countdown-unit-label">Days</div>
+        </div>
+        <div class="divider">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-value" id="hours">0</div>
+          <div class="countdown-unit-label">Hrs</div>
+        </div>
+        <div class="divider">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-value" id="minutes">0</div>
+          <div class="countdown-unit-label">Min</div>
+        </div>
+        <div class="divider">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-value" id="seconds">0</div>
+          <div class="countdown-unit-label">Sec</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Stats Strip -->
+  <section class="stats-strip">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-number"><span class="counter" data-target="2400">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-name">Waitlist signups</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span class="counter" data-target="94">0</span><span class="stat-suffix">%</span></div>
+        <div class="stat-name">Beta satisfaction</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span class="counter" data-target="12">0</span><span class="stat-suffix">ms</span></div>
+        <div class="stat-name">Avg query time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><span class="counter" data-target="1">0</span><span class="stat-suffix">B+</span></div>
+        <div class="stat-name">Events processed daily</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="analytics-footer">
+    <div class="footer-content">
+      <p class="footer-copy">© 2026 Spendly Inc. — Building in public.</p>
+      <div class="footer-links">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Countdown timer
+  function updateCountdown() {
+    const launchDate = new Date('2026-09-15T00:00:00Z');
+    const now = new Date();
+    const diff = launchDate - now;
+
+    if (diff > 0) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('days').textContent = String(days).padStart(2, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+  }
+
+  // Animated counter for stats
+  function animateCounters() {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const target = parseInt(counter.dataset.target);
+      let current = 0;
+      const increment = target / 60;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          counter.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          counter.textContent = Math.floor(current).toLocaleString();
+        }
+      }, 30);
+    });
+  }
+
+  // Grid background cursor glow
+  function handleMouseMove(e) {
+    const grid = document.getElementById('gridBg');
+    const rect = grid.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    grid.style.setProperty('--cursor-x', x + 'px');
+    grid.style.setProperty('--cursor-y', y + 'px');
+  }
+
+  document.getElementById('analyticsPage').addEventListener('mousemove', handleMouseMove);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Trigger counter animation on page load
+  setTimeout(animateCounters, 100);
+</script>
+{% endblock %}
