@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, redirect, url_for, a
 from werkzeug.security import check_password_hash
 from functools import wraps
 from datetime import datetime, date
-from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date, create_expense, get_expense_by_id, update_expense
+from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date, create_expense, get_expense_by_id, update_expense, delete_expense as remove_expense
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
@@ -400,10 +400,20 @@ def edit_expense(id):
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/delete")
+@app.route("/expenses/<int:id>/delete", methods=["POST"])
 @login_required
 def delete_expense(id):
-    return "Delete expense — coming in Step 9"
+    expense = get_expense_by_id(id)
+
+    if expense is None:
+        abort(404)
+
+    if expense["user_id"] != session["user_id"]:
+        abort(403)
+
+    remove_expense(id, session["user_id"])
+
+    return redirect(url_for("profile"))
 
 
 if __name__ == "__main__":

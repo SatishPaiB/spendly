@@ -384,6 +384,25 @@ a { color: inherit; text-decoration: none; }
     color: var(--ink);
 }
 
+.btn-danger {
+    display: inline-block;
+    background: transparent;
+    color: var(--danger);
+    padding: 0.65rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--danger);
+    transition: all 0.2s;
+}
+
+.btn-danger:hover {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
 /* ------------------------------------------------------------------ */
 /* Features section                                                    */
 /* ------------------------------------------------------------------ */
