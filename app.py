@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, redirect, url_for, a
 from werkzeug.security import check_password_hash
 from functools import wraps
 from datetime import datetime, date
-from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date, create_expense
+from database.db import init_db, seed_db, get_user_by_email, create_user, get_db, get_expenses_by_user_and_date, create_expense, get_expense_by_id, update_expense
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key-change-in-production"
@@ -67,6 +67,7 @@ def build_transactions_and_stats(expenses_rows):
         mapped = CATEGORY_MAPPING.get(db_category, {"name": db_category, "slug": db_category.lower()})
 
         transactions.append({
+            "id": expense["id"],
             "date": expense["date"],
             "description": expense["description"],
             "category": mapped["slug"],
@@ -328,10 +329,75 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit")
+@app.route("/expenses/<int:id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_expense(id):
-    return "Edit expense — coming in Step 8"
+    expense = get_expense_by_id(id)
+
+    if expense is None:
+        abort(404)
+
+    if expense["user_id"] != session["user_id"]:
+        abort(403)
+
+    today = date.today().isoformat()
+
+    if request.method == "GET":
+        return render_template(
+            "expenses/edit.html",
+            expense_id=id,
+            categories=CATEGORY_MAPPING,
+            today=today,
+            amount=expense["amount"],
+            date=expense["date"],
+            category=expense["category"],
+            description=expense["description"] or "",
+        )
+
+    if "amount" not in request.form or "category" not in request.form or "date" not in request.form:
+        abort(400)
+
+    amount_raw = request.form.get("amount", "").strip()
+    category = request.form.get("category", "").strip()
+    expense_date = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    error = None
+    amount = None
+
+    if not amount_raw or not category or not expense_date:
+        error = "Amount, category and date are required."
+    else:
+        try:
+            amount = float(amount_raw)
+            if amount <= 0:
+                error = "Amount must be a positive number."
+        except ValueError:
+            error = "Please enter a valid amount."
+
+        if error is None and category not in CATEGORY_MAPPING:
+            error = "Please select a valid category."
+
+        if error is None and not is_valid_date(expense_date):
+            error = "Please enter the date in YYYY-MM-DD format."
+
+    if error:
+        return render_template(
+            "expenses/edit.html",
+            expense_id=id,
+            categories=CATEGORY_MAPPING,
+            today=today,
+            error=error,
+            amount=amount_raw,
+            category=category,
+            date=expense_date if expense_date else today,
+            description=description,
+        )
+
+    amount = round(amount, 2)
+    update_expense(id, session["user_id"], amount, category, expense_date, description or None)
+
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/delete")

@@ -83,6 +83,7 @@
               <th>Description</th>
               <th>Category</th>
               <th class="tx-amount-col">Amount</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -93,11 +94,12 @@
               <td>{{ tx.description }}</td>
               <td><span class="badge badge-{{ tx.category }}">{{ tx.category|capitalize }}</span></td>
               <td class="tx-amount-col">₹{{ "%.2f"|format(tx.amount) }}</td>
+              <td><a href="{{ url_for('edit_expense', id=tx.id) }}" class="btn-ghost">Edit</a></td>
             </tr>
             {% endfor %}
             {% else %}
             <tr>
-              <td colspan="4" class="tx-empty-message">No expenses in this date range</td>
+              <td colspan="5" class="tx-empty-message">No expenses in this date range</td>
             </tr>
             {% endif %}
           </tbody>
