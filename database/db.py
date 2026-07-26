@@ -118,6 +118,32 @@ def create_expense(user_id, amount, category, date, description):
     return expense_id
 
 
+def get_expense_by_id(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, user_id, amount, category, date, description FROM expenses WHERE id = ?",
+        (id,),
+    )
+    expense = cursor.fetchone()
+    conn.close()
+    return expense
+
+
+def update_expense(id, user_id, amount, category, date, description):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE expenses SET amount = ?, category = ?, date = ?, description = ? "
+        "WHERE id = ? AND user_id = ?",
+        (amount, category, date, description, id, user_id),
+    )
+    conn.commit()
+    updated = cursor.rowcount
+    conn.close()
+    return updated
+
+
 def get_expenses_by_user_and_date(user_id, start_date=None, end_date=None):
     conn = get_db()
     cursor = conn.cursor()
